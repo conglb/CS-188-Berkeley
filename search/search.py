@@ -87,17 +87,70 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
+    #print 'Start:', problem.getStartState()
+    #print 'Is the start a goal?', problem.isGoalState(problem.getStartState())
+    #print "Start's sucessors:", problem.getSuccessors(problem.getStartState())
+    fringe = util.Stack()
+    fringe.push((problem.getStartState(), []))
+
+    visited = []
+    while not fringe.isEmpty():
+        state, actions = fringe.pop()
+        if problem.isGoalState(state):
+            return actions
+        visited.append(state)
+        for successor in problem.getSuccessors(state):
+            if successor[0] in visited:
+                continue
+            new_actions = actions[:] + [successor[1]]
+            new_element = successor[0], new_actions
+            fringe.push(new_element)
+    
+    return ['South']
+
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
+    visited = []
+    fringe = util.Queue()
+    fringe.push((problem.getStartState(),[]))
+
+    while not fringe.isEmpty():
+        state, actions = fringe.pop()
+        if problem.isGoalState(state):
+            return actions
+        visited.append(state)
+        for successor in problem.getSuccessors(state):
+            if successor[0] in visited:
+                continue
+            new_actions = actions[:] + [successor[1]]
+            new_element = successor[0], new_actions
+            fringe.push(new_element)
+
+    return ['South']
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
+    visited = []
+    frontier = util.PriorityQueue()
+    frontier.push(0, (problem.getStartState(), []))
+
+    while not frontier.isEmpty():
+        state, actions = frontier.pop()
+        if problem.isGoalState(state):
+            return actions
+        for new_state, action in problem.getSuccessor(state):
+            if new_state in visited:
+                continue
+            new_actions = actions[:] + [action]
+            frontier.push()
+            problem.get
 
 def nullHeuristic(state, problem=None):
     """
