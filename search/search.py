@@ -107,7 +107,7 @@ def depthFirstSearch(problem):
             new_element = successor[0], new_actions
             fringe.push(new_element)
     
-    return ['South']
+    return []
 
 
 def breadthFirstSearch(problem):
@@ -122,15 +122,17 @@ def breadthFirstSearch(problem):
         state, actions = fringe.pop()
         if problem.isGoalState(state):
             return actions
+        if state in visited:
+            continue
         visited.append(state)
         for successor in problem.getSuccessors(state):
-            if successor[0] in visited:
-                continue
+            #if successor[0] in visited:
+            #    continue
             new_actions = actions[:] + [successor[1]]
             new_element = successor[0], new_actions
             fringe.push(new_element)
 
-    return ['South']
+    return []
 
 
 def uniformCostSearch(problem):
@@ -139,18 +141,22 @@ def uniformCostSearch(problem):
     #util.raiseNotDefined()
     visited = []
     frontier = util.PriorityQueue()
-    frontier.push(0, (problem.getStartState(), []))
+    frontier.push((problem.getStartState(), []), 0)
 
     while not frontier.isEmpty():
         state, actions = frontier.pop()
         if problem.isGoalState(state):
             return actions
-        for new_state, action in problem.getSuccessor(state):
-            if new_state in visited:
-                continue
+        if state in visited:
+            continue
+        visited.append(state)
+        for new_state, action, cost in problem.getSuccessors(state):
+            #if new_state in visited:
+            #    continue
             new_actions = actions[:] + [action]
-            frontier.push()
-            problem.get
+            frontier.push((new_state, new_actions), problem.getCostOfActions(actions) + cost)
+            
+    return []
 
 def nullHeuristic(state, problem=None):
     """
@@ -162,8 +168,23 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
+    visited = []
+    frontier = util.PriorityQueue()
+    frontier.push((problem.getStartState(), []), 0)
 
+    while not frontier.isEmpty():
+        state, actions = frontier.pop()
+        if problem.isGoalState(state):
+            return actions
+        if state in visited:
+            continue
+        visited.append(state)
+        for new_state, action, cost in problem.getSuccessors(state):
+            new_actions = actions[:] + [action]
+            frontier.push((new_state, new_actions), cost + problem.getCostOfActions(actions) + heuristic(new_state, problem))
+
+    return []
 
 # Abbreviations
 bfs = breadthFirstSearch
